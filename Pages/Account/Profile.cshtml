@@ -1,0 +1,16 @@
+@page
+@model ElectroGO.Pages.Account.ProfileModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div class="auth-page">
+    <div class="auth-card">
+        <h1>Your Profile</h1>
+        <div class="profile-field"><strong>Name:</strong> @Model.ProfileUser.FullName</div>
+        <div class="profile-field"><strong>Username:</strong> @Model.ProfileUser.Username</div>
+        <div class="profile-field"><strong>Email:</strong> @Model.ProfileUser.Email</div>
+        <div class="profile-field"><strong>Phone:</strong> @Model.ProfileUser.Phone</div>
+        <a class="btn-primary" href="/Account/Logout">Logout</a>
+    </div>
+</div>

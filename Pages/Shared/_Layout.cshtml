@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ElectroGO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav id="main-nav">
+            <a href="/" class="nav-logo">
+                <div class="bolt-icon"></div>
+                ELECTRO<span>GO</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#how">How It Works</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#network">Network</a></li>
+            </ul>
+            <div class="auth-links">
+                @if (User?.Identity?.IsAuthenticated ?? false)
+                {
+                    <a class="nav-link" href="/Account/Profile">Profile</a>
+                    <a class="nav-link nav-cta" href="/Account/Logout">Logout</a>
+                }
+                else
+                {
+                    <a class="nav-link" href="/Account/Login">Login</a>
+                    <a class="nav-link nav-cta" href="/Account/Register">Register</a>
+                }
+            </div>
+        </nav>
+    </header>
+
+    @RenderBody()
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/dashboard.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

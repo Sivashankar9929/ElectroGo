@@ -1,0 +1,313 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "ElectroGO — Charge the Future";
+}
+
+<div class="scanlines"></div>
+
+<div id="loader">
+  <div class="loader-logo">ELECTRO<span>GO</span></div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+  <div class="loader-percent" id="loader-pct">INITIALIZING...</div>
+</div>
+
+<canvas id="particle-canvas"></canvas>
+
+<section class="hero" id="home">
+  <p class="hero-eyebrow">⚡ The Future of EV Charging</p>
+  <h1 class="hero-headline">
+    CHARGE<span class="line-cyan">SMARTER.</span>
+    <span class="line-volt">GO FURTHER.</span>
+  </h1>
+  <p class="hero-sub">
+    India&apos;s fastest growing EV charging network. 800+ stations, 10-minute rapid charge, and real-time availability — all in your pocket.
+  </p>
+  <div class="hero-actions">
+    <a href="#how" class="btn-primary">Start Charging</a>
+    <a href="#features" class="btn-ghost">Explore Network</a>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-number" data-target="800">0</div>
+    <div class="stat-label">Charging Stations</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number" data-target="120"><span class="stat-unit"></span>0</div>
+    <div class="stat-label">Max Power (kW)</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number" data-target="10">0</div>
+    <div class="stat-label">Min Rapid Charge</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number" data-target="98">0</div>
+    <div class="stat-label">% Uptime</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-number" data-target="50">0</div>
+    <div class="stat-label">Cities Covered</div>
+  </div>
+</div>
+
+<section class="how-it-works" id="how">
+  <p class="section-eyebrow">The Process</p>
+  <h2 class="section-title">Three steps to<br><span style="color:var(--cyan)">full power.</span></h2>
+  <p class="section-desc">No queues, no confusion. From parking to charging in under 60 seconds with the ElectroGO app.</p>
+
+  <div class="steps-grid">
+    <div class="step-card" style="transition-delay: 0s">
+      <div class="step-glow"></div>
+      <div class="step-number">STEP 01</div>
+      <div class="step-icon-wrap">
+        <svg class="step-icon" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 8v4l3 3"/>
+        </svg>
+      </div>
+      <div class="step-title">Find &amp; Navigate</div>
+      <div class="step-text">Open the app, see every available charger near you in real-time. Filter by power level, plug type, or price. Get turn-by-turn directions.</div>
+    </div>
+
+    <div class="step-card" style="transition-delay: 0.15s">
+      <div class="step-glow"></div>
+      <div class="step-number">STEP 02</div>
+      <div class="step-icon-wrap">
+        <svg class="step-icon" viewBox="0 0 24 24">
+          <rect x="5" y="2" width="14" height="20" rx="2"/>
+          <path d="M12 18h.01M8 6h8M8 10h8"/>
+        </svg>
+      </div>
+      <div class="step-title">Scan &amp; Connect</div>
+      <div class="step-text">QR scan the station to start your session instantly. No membership cards, no waiting. Plug in your cable and the session begins automatically.</div>
+    </div>
+
+    <div class="step-card" style="transition-delay: 0.3s">
+      <div class="step-glow"></div>
+      <div class="step-number">STEP 03</div>
+      <div class="step-icon-wrap">
+        <svg class="step-icon" viewBox="0 0 24 24">
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+        </svg>
+      </div>
+      <div class="step-title">Charge &amp; Pay</div>
+      <div class="step-text">Track real-time energy flow, cost, and ETA from your phone. Auto-payment when you unplug. Get full session history and carbon offset report.</div>
+    </div>
+
+    <div class="step-card" style="transition-delay: 0.45s">
+      <div class="step-glow"></div>
+      <div class="step-number">STEP 04</div>
+      <div class="step-icon-wrap">
+        <svg class="step-icon" viewBox="0 0 24 24">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <div class="step-title">Go Green</div>
+      <div class="step-text">Every charge logged as CO₂ saved. Earn GreenPoints redeemable for free sessions. Join 200,000+ drivers powering a cleaner India.</div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="features-section">
+    <div>
+      <p class="section-eyebrow">Why ElectroGO</p>
+      <h2 class="section-title">Built for<br><span style="color:var(--volt)">speed obsessed</span><br>drivers.</h2>
+      <p class="section-desc">Every feature engineered to eliminate the friction between you and a full battery.</p>
+
+      <ul class="features-list">
+        <li class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text">
+            <strong>120kW Rapid DC Charging</strong>
+            <span>Our flagship stations deliver 10–80% in under 20 minutes for most EV models.</span>
+          </div>
+        </li>
+        <li class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text">
+            <strong>Universal Plug Compatibility</strong>
+            <span>CCS2, CHAdeMO, Type 2 AC and Bharat DC001 — every major standard supported.</span>
+          </div>
+        </li>
+        <li class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text">
+            <strong>AI-Powered Route Planning</strong>
+            <span>Our app calculates exactly which stations to hit on your route based on your battery and range.</span>
+          </div>
+        </li>
+        <li class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text">
+            <strong>Zero-Wait Slot Booking</strong>
+            <span>Reserve your charger up to 4 hours in advance. Arrive and plug in immediately.</span>
+          </div>
+        </li>
+        <li class="feature-item">
+          <div class="feature-dot"></div>
+          <div class="feature-text">
+            <strong>Solar-Powered Stations</strong>
+            <span>60% of our grid is powered by rooftop solar panels. Your charge is genuinely green.</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="pricing" style="background: rgba(5,10,20,0.4);">
+  <p class="section-eyebrow" style="text-align:center">Transparent Pricing</p>
+  <h2 class="section-title" style="text-align:center">Pay less.<br><span style="color:var(--cyan)">Charge more.</span></h2>
+  <p class="section-desc" style="text-align:center; margin:0 auto; max-width: 480px;">No hidden fees, no confusing tariffs. Pick a plan that matches how you drive.</p>
+
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="pricing-tier">Explorer</div>
+      <div class="pricing-price"><sup>₹</sup>0</div>
+      <div class="pricing-unit">Pay-as-you-go · no commitment</div>
+      <ul class="pricing-features">
+        <li>₹12 / kWh on all stations</li>
+        <li>Access to 800+ chargers</li>
+        <li>Session history &amp; receipts</li>
+        <li>Standard customer support</li>
+        <li>CCS2 &amp; Type 2 AC access</li>
+      </ul>
+      <button class="btn-plan btn-plan-outline">Get Started Free</button>
+    </div>
+
+    <div class="pricing-card featured">
+      <div class="pricing-tier">Cruiser</div>
+      <div class="pricing-price"><sup>₹</sup>499</div>
+      <div class="pricing-unit">per month · billed monthly</div>
+      <ul class="pricing-features">
+        <li>₹8 / kWh — 33% savings</li>
+        <li>Priority queue access</li>
+        <li>2 free 30-min sessions / month</li>
+        <li>Slot booking up to 4 hrs ahead</li>
+        <li>GreenPoints × 2 multiplier</li>
+        <li>All plug types including CHAdeMO</li>
+      </ul>
+      <button class="btn-plan btn-plan-filled">Start Cruiser Plan</button>
+    </div>
+
+    <div class="pricing-card">
+      <div class="pricing-tier">Fleet Pro</div>
+      <div class="pricing-price"><sup>₹</sup>2999</div>
+      <div class="pricing-unit">per month · up to 10 vehicles</div>
+      <ul class="pricing-features">
+        <li>₹6 / kWh fleet rate</li>
+        <li>Dedicated fleet dashboard</li>
+        <li>Unlimited slot reservations</li>
+        <li>API integration &amp; invoicing</li>
+        <li>24/7 dedicated support</li>
+        <li>Custom GST billing</li>
+      </ul>
+      <button class="btn-plan btn-plan-outline">Contact Fleet Sales</button>
+    </div>
+  </div>
+</section>
+
+<section id="network" style="padding: 7rem 4rem;">
+  <p class="section-eyebrow" style="text-align:center">Live Charging Network</p>
+  <h2 class="section-title" style="text-align:center">10 real stations.<br><span style="color:var(--cyan)">Hyderabad, right now.</span></h2>
+  <p class="section-desc" style="text-align:center; margin: 0 auto 3rem; max-width:520px;">Every pin is a verified, 24/7 EV charging station in Hyderabad. Click any marker to view details, get directions, and check live availability.</p>
+
+  <div style="display:flex; justify-content:center; gap:2rem; margin-bottom:2rem; flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:0.5rem;font-family:'Orbitron',monospace;font-size:0.7rem;letter-spacing:0.1em;">
+      <span style="width:8px;height:8px;background:#39FF14;border-radius:50%;display:inline-block;box-shadow:0 0 8px #39FF14;animation:ping-dot 1.5s ease-in-out infinite;"></span>
+      <span style="color:#8B9DBF;">8 ONLINE</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:0.5rem;font-family:'Orbitron',monospace;font-size:0.7rem;letter-spacing:0.1em;">
+      <span style="width:8px;height:8px;background:#FFB800;border-radius:50%;display:inline-block;"></span>
+      <span style="color:#8B9DBF;">2 BUSY</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:0.5rem;font-family:'Orbitron',monospace;font-size:0.7rem;letter-spacing:0.1em;">
+      <span style="width:8px;height:8px;background:#00F5FF;border-radius:50%;display:inline-block;"></span>
+      <span style="color:#8B9DBF;">ALL 24/7</span>
+    </div>
+  </div>
+
+  <div class="map-container" style="position:relative;border:1px solid rgba(0,245,255,0.25);border-radius:4px;overflow:hidden;box-shadow:0 0 40px rgba(0,245,255,0.08);;background:rgba(5,10,20,0.95);">
+    <div style="padding:0.8rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(0,245,255,0.15);">
+      <span style="font-family:'Orbitron',monospace;font-size:0.65rem;color:#00F5FF;letter-spacing:0.25em;">⚡ ELECTRO GO — HYDERABAD GRID</span>
+      <span style="font-family:'Orbitron',monospace;font-size:0.6rem;color:#39FF14;letter-spacing:0.15em;">● LIVE</span>
+    </div>
+    <div id="hyd-map" style="width:100%;height:520px;"></div>
+  </div>
+
+  <div style="margin-top:2.5rem;">
+    <p style="font-family:'Orbitron',monospace;font-size:0.65rem;letter-spacing:0.3em;color:#8B9DBF;margin-bottom:1.2rem;text-transform:uppercase;">All Stations — Hyderabad</p>
+    <div id="station-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;"></div>
+  </div>
+</section>
+
+<section style="background: rgba(5,10,20,0.3);">
+  <p class="section-eyebrow" style="text-align:center">Driver Stories</p>
+  <h2 class="section-title" style="text-align:center">What our<br><span style="color:var(--cyan)">community says.</span></h2>
+
+  <div class="testimonials-grid">
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"Charged my Nexon EV from 10% to 80% in 22 minutes at the Pune station. The app predicted 24 minutes — pretty much spot on. Range anxiety? What range anxiety?"</p>
+      <div class="testi-author">
+        <div class="testi-avatar">RV</div>
+        <div>
+          <div class="testi-name">Rohan Varma</div>
+          <div class="testi-role">Tata Nexon EV · Pune</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"The slot booking feature is a game-changer for our delivery fleet. We schedule charges overnight and every van is full by 6 AM. Cost savings are massive on the fleet plan."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">PS</div>
+        <div>
+          <div class="testi-name">Priya Sharma</div>
+          <div class="testi-role">Fleet Manager · Bangalore</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"Drove Delhi to Jaipur and back on one long weekend. Used ElectroGO stations both ways — both times I walked to a café, came back to 90%. Seamless doesn't cover it."</p>
+      <div class="testi-author">
+        <div class="testi-avatar">AK</div>
+        <div>
+          <div class="testi-name">Amit Khanna</div>
+          <div class="testi-role">MG ZS EV · Delhi</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <h2 class="cta-title" id="cta-title">
+    Ready to <span style="color:var(--cyan)">plug in</span><br>
+    to the future?
+  </h2>
+  <p class="section-desc" style="margin: 0 auto 2.5rem; text-align:center; max-width:440px; opacity:1; transition: none;">Download ElectroGO and find your nearest rapid charger in seconds.</p>
+  <div class="hero-actions" style="justify-content:center; opacity:1; animation:none;">
+    <a href="#" class="btn-primary">Download App</a>
+    <a href="#" class="btn-ghost">View All Stations</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">ELECTRO<span>GO</span></div>
+  <ul class="footer-links">
+    <li><a href="#">Privacy</a></li>
+    <li><a href="#">Terms</a></li>
+    <li><a href="#">Support</a></li>
+    <li><a href="#">Press</a></li>
+    <li><a href="#">API</a></li>
+  </ul>
+  <p class="footer-copy">© 2026 ElectroGO. Charging India forward.</p>
+</footer>

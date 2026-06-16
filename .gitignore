@@ -1,0 +1,50 @@
+# Build output
+bin/
+obj/
+
+# Visual Studio temporary files
+.vs/
+*.vcxproj.user
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider / JetBrains
+.idea/
+*.sln.iml
+*.DotSettings.user
+_ReSharper*/
+
+# Visual Studio Code
+.vscode/
+
+# ASP.NET / .NET generated files
+*.log
+*.vspscc
+*.vssscc
+*.db
+*.db-shm
+*.db-wal
+*.[Cc]ache
+*.[Tt]emp
+*.swp
+*.pfx
+*.key
+*.pem
+
+# Local settings / secrets
+appsettings.Development.json
+secrets.json
+
+# NuGet / package artifacts
+*.nupkg
+packages/
+.nuget/
+project.lock.json
+project.fragment.lock.json
+*.user
+
+# OS files
+Thumbs.db
+.DS_Store

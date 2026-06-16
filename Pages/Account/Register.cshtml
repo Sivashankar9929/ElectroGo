@@ -1,0 +1,29 @@
+@page
+@model ElectroGO.Pages.Account.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="auth-page">
+    <div class="auth-card">
+        <h1>Register</h1>
+        <form method="post">
+            <label>Full Name</label>
+            <input asp-for="Input.FullName" />
+            <label>Email</label>
+            <input asp-for="Input.Email" type="email" />
+            <label>Username</label>
+            <input asp-for="Input.Username" />
+            <label>Phone</label>
+            <input asp-for="Input.Phone" />
+            <label>Password</label>
+            <input asp-for="Input.Password" type="password" />
+            <button type="submit" class="btn-primary">Create Account</button>
+        </form>
+        <p>Already have an account? <a href="/Account/Login">Login</a></p>
+        @if (Model.ErrorMessage != null)
+        {
+            <div class="auth-error">@Model.ErrorMessage</div>
+        }
+    </div>
+</div>

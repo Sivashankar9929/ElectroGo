@@ -1,0 +1,23 @@
+@page
+@model ElectroGO.Pages.Account.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="auth-page">
+    <div class="auth-card">
+        <h1>Login</h1>
+        <form method="post">
+            <label>Email or Username</label>
+            <input asp-for="Input.Account" />
+            <label>Password</label>
+            <input asp-for="Input.Password" type="password" />
+            <button type="submit" class="btn-primary">Login</button>
+        </form>
+        <p>New here? <a href="/Account/Register">Create an account</a></p>
+        @if (Model.ErrorMessage != null)
+        {
+            <div class="auth-error">@Model.ErrorMessage</div>
+        }
+    </div>
+</div>

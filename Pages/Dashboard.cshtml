@@ -1,0 +1,562 @@
+@page
+@using Microsoft.AspNetCore.Authorization
+@model ElectroGO.Pages.DashboardModel
+@attribute [Authorize]
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="dashboard-shell">
+    <aside class="dashboard-sidebar">
+        <div class="sidebar-brand">
+            <div class="logo-mark"></div>
+            <div>
+                <span class="brand-label">Electro</span>
+                <span class="brand-accent">GO</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a class="sidebar-link active" href="/Dashboard">Dashboard</a>
+            <a class="sidebar-link" href="#stations">Charging Stations</a>
+            <a class="sidebar-link" href="#bookings">My Bookings</a>
+            <a class="sidebar-link" href="#history">Charging History</a>
+            <a class="sidebar-link" href="#wallet">Wallet</a>
+            <a class="sidebar-link" href="#vehicles">Vehicles</a>
+            <a class="sidebar-link" href="#analytics">Analytics</a>
+            <a class="sidebar-link" href="#profile">Profile</a>
+            <a class="sidebar-link" href="#support">Help & Support</a>
+            <a class="sidebar-link" href="/Account/Logout">Logout</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-footer-title">Live Session</div>
+            <div class="sidebar-footer-value">Connected</div>
+            <div class="sidebar-footer-meta">Station: CyberHub</div>
+        </div>
+    </aside>
+
+    <div class="dashboard-main">
+        <header class="dashboard-topbar">
+            <div class="topbar-left">
+                <div class="topbar-search">
+                    <input id="dashboard-search" type="search" placeholder="Search stations, history or invoices" />
+                    <span>🔍</span>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle theme">🌙</button>
+                <button class="icon-btn notifications-btn" aria-label="Notifications">🔔<span class="badge">3</span></button>
+                <div class="profile-pill">
+                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80" alt="Profile photo" />
+                    <div>
+                        <span>@Model.UserName</span>
+                        <small>Premium Driver</small>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="dashboard-welcome">
+            <div class="welcome-card">
+                <div class="welcome-content">
+                    <p class="eyebrow">Good @Model.TimeOfDayGreeting</p>
+                    <h1>@Model.Greeting, @Model.UserName</h1>
+                    <p>Tesla Model 3 · Premium · 78% Battery</p>
+                </div>
+                <div class="vehicle-status">
+                    <div class="battery-ring-large">
+                        <svg viewBox="0 0 200 200" class="battery-circle">
+                            <circle cx="100" cy="100" r="95" class="battery-ring-bg" />
+                            <circle cx="100" cy="100" r="95" class="battery-ring-fill" style="--charge-percent: 78;" />
+                        </svg>
+                        <div class="battery-text">
+                            <span class="battery-value">78%</span>
+                            <span class="battery-label">Charged</span>
+                        </div>
+                    </div>
+                    <div class="vehicle-meta">
+                        <div class="meta-item">
+                            <span class="meta-icon">⚡</span>
+                            <div>
+                                <p class="meta-label">Range</p>
+                                <strong>320 km</strong>
+                            </div>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-icon">⏱️</span>
+                            <div>
+                                <p class="meta-label">Time left</p>
+                                <strong>45 min</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="active-charging-section">
+            <div class="charging-status-card">
+                <div class="charging-header">
+                    <div>
+                        <h3>⚡ Active Charging Session</h3>
+                        <p class="station-name">CyberHub Plaza • Station 12</p>
+                    </div>
+                    <span class="charging-badge">LIVE</span>
+                </div>
+                
+                <div class="charging-metrics">
+                    <div class="metric-group">
+                        <div class="metric-box">
+                            <p class="metric-label">Current Speed</p>
+                            <h3 class="metric-value">120 <span class="unit">kW</span></h3>
+                            <div class="metric-bar"><div class="metric-fill" style="width: 92%;"></div></div>
+                        </div>
+                        <div class="metric-box">
+                            <p class="metric-label">Energy Delivered</p>
+                            <h3 class="metric-value">31.4 <span class="unit">kWh</span></h3>
+                            <p class="metric-meta">of 45 kWh target</p>
+                        </div>
+                        <div class="metric-box">
+                            <p class="metric-label">Current Cost</p>
+                            <h3 class="metric-value">₹253 <span class="unit">/est</span></h3>
+                            <p class="metric-meta">₹6.99 per kWh</p>
+                        </div>
+                        <div class="metric-box">
+                            <p class="metric-label">Session Time</p>
+                            <h3 class="metric-value">36 <span class="unit">min</span></h3>
+                            <p class="metric-meta">45 min remaining</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charging-progress">
+                    <div class="progress-label">
+                        <span>Charging Progress</span>
+                        <span class="progress-percent">78% → 90%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-background">
+                            <div class="progress-bar-fill" style="width: 78%;"></div>
+                        </div>
+                    </div>
+                    <div class="progress-milestones">
+                        <div class="milestone milestone-done">
+                            <span class="milestone-point">0%</span>
+                        </div>
+                        <div class="milestone milestone-done">
+                            <span class="milestone-point">50%</span>
+                        </div>
+                        <div class="milestone milestone-done">
+                            <span class="milestone-point">78%</span>
+                        </div>
+                        <div class="milestone">
+                            <span class="milestone-point">90%</span>
+                        </div>
+                        <div class="milestone">
+                            <span class="milestone-point">100%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="charging-actions">
+                    <button class="btn-primary" id="btn-start">⏸ Pause Charging</button>
+                    <button class="btn-danger" id="btn-stop">🛑 Stop Session</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-grid">
+            <article class="status-card">
+                <div class="card-head">
+                    <span>🔋 Battery Status</span>
+                    <span class="status-pill online">Charging</span>
+                </div>
+                <div class="circle-meter">
+                    <div class="meter-ring" style="--charge: 78;"></div>
+                    <div class="meter-center">
+                        <span class="meter-value">78%</span>
+                        <small>Battery level</small>
+                    </div>
+                </div>
+                <div class="charge-summary">
+                    <div>
+                        <span>Estimated range</span>
+                        <strong>320 km</strong>
+                    </div>
+                    <div>
+                        <span>Next milestone</span>
+                        <strong>90% full</strong>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card wallet-card" id="wallet">
+                <div class="card-head">
+                    <span>💰 Wallet Balance</span>
+                    <button class="btn-ghost small">+ Add</button>
+                </div>
+                <div class="wallet-balance">₹4,280</div>
+                <div class="wallet-meta">
+                    <span>Available balance</span>
+                </div>
+                <div class="wallet-actions">
+                    <button class="btn-outline small">Recharge Wallet</button>
+                </div>
+            </article>
+
+            <article class="card session-card">
+                <div class="card-head">
+                    <span>📊 Session Overview</span>
+                </div>
+                <div class="session-grid">
+                    <div><span>Start time</span><strong>08:24 AM</strong></div>
+                    <div><span>Duration</span><strong>36 min</strong></div>
+                    <div><span>Energy used</span><strong>31.4 kWh</strong></div>
+                    <div><span>Charging speed</span><strong>118 kW</strong></div>
+                    <div><span>ETA to 90%</span><strong>09:10 AM</strong></div>
+                    <div><span>Est. total cost</span><strong>₹253</strong></div>
+                </div>
+            </article>
+
+            <article class="card stats-card">
+                <div class="card-head">
+                    <span>📈 Performance</span>
+                </div>
+                <div class="stats-content">
+                    <div class="stat-item">
+                        <p class="stat-label">Power Output</p>
+                        <div class="stat-chart">
+                            <div class="stat-bar" style="height: 75%;"></div>
+                            <div class="stat-bar" style="height: 85%;"></div>
+                            <div class="stat-bar" style="height: 92%;"></div>
+                            <div class="stat-bar" style="height: 88%;"></div>
+                            <div class="stat-bar" style="height: 78%;"></div>
+                        </div>
+                        <p class="stat-value">120 kW avg</p>
+                    </div>
+                    <div class="stat-item">
+                        <p class="stat-label">Efficiency</p>
+                        <p class="stat-efficiency">94.2%</p>
+                        <p class="stat-meta">↑ 5% from normal</p>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <section class="section-block" id="stations">
+            <div class="section-header">
+                <div>
+                    <p class="section-eyebrow">Nearby stations</p>
+                    <h2 class="section-title">Fast charging spots in your area</h2>
+                </div>
+                <button class="btn-ghost">Browse all stations</button>
+            </div>
+            <div class="station-grid">
+                <article class="station-card">
+                    <div class="station-card-top">
+                        <span>CyberHub Station</span>
+                        <span class="status-pill online">Available</span>
+                    </div>
+                    <p>Banjara Hills · 0.8 km</p>
+                    <div class="station-meta"><strong>120 kW</strong><strong>₹8 / kWh</strong><strong>CCS2</strong></div>
+                </article>
+                <article class="station-card">
+                    <div class="station-card-top">
+                        <span>SolarPoint Charge</span>
+                        <span class="status-pill busy">Busy</span>
+                    </div>
+                    <p>Gachibowli · 1.2 km</p>
+                    <div class="station-meta"><strong>100 kW</strong><strong>₹9 / kWh</strong><strong>CHAdeMO</strong></div>
+                </article>
+                <article class="station-card">
+                    <div class="station-card-top">
+                        <span>GreenGrid Hub</span>
+                        <span class="status-pill online">Available</span>
+                    </div>
+                    <p>Kondapur · 1.8 km</p>
+                    <div class="station-meta"><strong>80 kW</strong><strong>₹9 / kWh</strong><strong>Type 2</strong></div>
+                </article>
+            </div>
+        </section>
+
+        <section class="section-block" id="bookings">
+            <div class="section-header">
+                <div>
+                    <p class="section-eyebrow">My Bookings</p>
+                    <h2 class="section-title">Upcoming charging reservations</h2>
+                </div>
+                <button class="btn-ghost">Manage bookings</button>
+            </div>
+            <div class="station-grid">
+                <article class="station-card">
+                    <div class="station-card-top">
+                        <span>CyberHub Reserved</span>
+                        <span class="status-pill online">Confirmed</span>
+                    </div>
+                    <p>June 18 · 10:00 AM · 0.8 km</p>
+                    <div class="station-meta"><strong>120 kW</strong><strong>₹8 / kWh</strong><strong>CCS2</strong></div>
+                </article>
+                <article class="station-card">
+                    <div class="station-card-top">
+                        <span>GreenGrid Slot</span>
+                        <span class="status-pill online">Pending</span>
+                    </div>
+                    <p>June 20 · 02:30 PM · 1.8 km</p>
+                    <div class="station-meta"><strong>80 kW</strong><strong>₹9 / kWh</strong><strong>Type 2</strong></div>
+                </article>
+            </div>
+        </section>
+
+        <section class="section-block" id="analytics">
+            <div class="analytics-header">
+                <h2>📊 Performance Analytics</h2>
+                <div class="analytics-controls">
+                    <button class="time-filter active" data-range="7d">7 Days</button>
+                    <button class="time-filter" data-range="30d">30 Days</button>
+                    <button class="time-filter" data-range="90d">90 Days</button>
+                </div>
+            </div>
+
+            <!-- KPI Cards Row -->
+            <div class="analytics-kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-icon">⚡</div>
+                    <div class="kpi-content">
+                        <p class="kpi-label">Total Energy</p>
+                        <h3 class="kpi-value">145.2 kWh</h3>
+                        <p class="kpi-trend trend-up">↑ 12% vs last period</p>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">💰</div>
+                    <div class="kpi-content">
+                        <p class="kpi-label">Total Spent</p>
+                        <h3 class="kpi-value">₹1,248</h3>
+                        <p class="kpi-trend trend-down">↓ 8% vs last period</p>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">🌱</div>
+                    <div class="kpi-content">
+                        <p class="kpi-label">CO₂ Saved</p>
+                        <h3 class="kpi-value">89.3 kg</h3>
+                        <p class="kpi-trend trend-up">↑ 15% vs last period</p>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon">⏱️</div>
+                    <div class="kpi-content">
+                        <p class="kpi-label">Avg Efficiency</p>
+                        <h3 class="kpi-value">94.2%</h3>
+                        <p class="kpi-trend trend-up">↑ 5% vs last period</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="analytics-row">
+                <div class="analytics-card full-width">
+                    <div class="card-header">
+                        <h3>Energy Consumption Trend</h3>
+                        <div class="chart-tabs">
+                            <button class="chart-tab active" data-period="daily">Daily</button>
+                            <button class="chart-tab" data-period="weekly">Weekly</button>
+                            <button class="chart-tab" data-period="monthly">Monthly</button>
+                        </div>
+                    </div>
+                    <div class="chart-visual" id="energy-chart"></div>
+                </div>
+            </div>
+
+            <!-- Comparison Row -->
+            <div class="analytics-row">
+                <div class="analytics-card">
+                    <div class="card-header">
+                        <h3>Cost Distribution</h3>
+                    </div>
+                    <canvas id="cost-pie-chart"></canvas>
+                </div>
+                <div class="analytics-card">
+                    <div class="card-header">
+                        <h3>Charging Speed Breakdown</h3>
+                    </div>
+                    <canvas id="speed-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- Insights Row -->
+            <div class="analytics-insights-row">
+                <div class="insight-card insight-positive">
+                    <div class="insight-icon">✨</div>
+                    <div class="insight-content">
+                        <p class="insight-title">Peak Hour Savings</p>
+                        <p class="insight-text">Charging after 10 PM saves 35% on electricity costs</p>
+                    </div>
+                </div>
+                <div class="insight-card insight-alert">
+                    <div class="insight-icon">⚠️</div>
+                    <div class="insight-content">
+                        <p class="insight-title">Usage Alert</p>
+                        <p class="insight-text">Your consumption is 22% above your monthly average</p>
+                    </div>
+                </div>
+                <div class="insight-card insight-eco">
+                    <div class="insight-icon">🌍</div>
+                    <div class="insight-content">
+                        <p class="insight-title">Environmental Impact</p>
+                        <p class="insight-text">You've offset 89.3 kg CO₂ equivalent this month</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Metrics -->
+            <div class="analytics-metrics-table">
+                <div class="table-header">
+                    <p class="table-title">Monthly Comparison</p>
+                </div>
+                <table class="metrics-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Current Month</th>
+                            <th>Previous Month</th>
+                            <th>Change</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Total Charges</td>
+                            <td>18</td>
+                            <td>16</td>
+                            <td class="change-up">+12.5%</td>
+                        </tr>
+                        <tr>
+                            <td>Energy Consumed</td>
+                            <td>145.2 kWh</td>
+                            <td>129.6 kWh</td>
+                            <td class="change-up">+12.0%</td>
+                        </tr>
+                        <tr>
+                            <td>Total Cost</td>
+                            <td>₹1,248</td>
+                            <td>₹1,356</td>
+                            <td class="change-down">-7.9%</td>
+                        </tr>
+                        <tr>
+                            <td>Avg Session</td>
+                            <td>8.1 kWh</td>
+                            <td>8.1 kWh</td>
+                            <td class="change-neutral">0%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="section-block" id="history">
+            <div class="section-header">
+                <div>
+                    <p class="section-eyebrow">Charging History</p>
+                    <h2 class="section-title">Recent sessions & payments</h2>
+                </div>
+                <div class="history-controls">
+                    <input id="history-search" type="search" placeholder="Search history..." />
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Station</th>
+                            <th>Energy</th>
+                            <th>Duration</th>
+                            <th>Status</th>
+                            <th>Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-rows"></tbody>
+                </table>
+            </div>
+            <div class="pagination" id="history-pagination"></div>
+        </section>
+
+        <section class="section-block metrics-row">
+            <article class="metric-card">
+                <span>CO₂ saved</span>
+                <strong>12.3 kg</strong>
+                <small>Equivalent to 54 km driven</small>
+            </article>
+            <article class="metric-card">
+                <span>Trees planted</span>
+                <strong>4</strong>
+                <small>Estimated in one year</small>
+            </article>
+            <article class="metric-card">
+                <span>Green energy</span>
+                <strong>72%</strong>
+                <small>of total charging</small>
+            </article>
+        </section>
+
+        <section class="section-block" id="profile">
+            <div class="section-header">
+                <div>
+                    <p class="section-eyebrow">Profile</p>
+                    <h2 class="section-title">Your driver profile</h2>
+                </div>
+                <button class="btn-ghost">Edit profile</button>
+            </div>
+            <div class="station-grid">
+                <article class="station-card">
+                    <div class="station-card-top">
+                        <span>Driver</span>
+                        <span class="status-pill online">Premium</span>
+                    </div>
+                    <p>Name: @Model.UserName</p>
+                    <div class="station-meta"><strong>Email</strong><strong>Phone</strong><strong>Member since 2024</strong></div>
+                </article>
+            </div>
+        </section>
+
+        <section class="section-block" id="support">
+            <div class="section-header">
+                <div>
+                    <p class="section-eyebrow">Help & Support</p>
+                    <h2 class="section-title">Need assistance? We’re here</h2>
+                </div>
+            </div>
+            <div class="station-grid">
+                <article class="station-card">
+                    <div class="station-card-top">
+                        <span>Emergency Support</span>
+                        <span class="status-pill online">24/7</span>
+                    </div>
+                    <p>Get immediate help with charging issues or station service.</p>
+                    <div class="station-meta"><strong>Phone</strong><strong>Live chat</strong><strong>Email</strong></div>
+                </article>
+                <article class="station-card">
+                    <div class="station-card-top">
+                        <span>Booking Support</span>
+                        <span class="status-pill online">Fast</span>
+                    </div>
+                    <p>Manage reservation changes, cancellations, and slot confirmations.</p>
+                    <div class="station-meta"><strong>Phone</strong><strong>Chat</strong><strong>Help docs</strong></div>
+                </article>
+            </div>
+        </section>
+
+        <section class="section-block quick-actions" id="vehicles">
+            <p class="section-eyebrow">Quick Actions</p>
+            <div class="quick-grid">
+                <button class="quick-card">Find Nearby Station</button>
+                <button class="quick-card">Book Charging Slot</button>
+                <button class="quick-card">Scan QR Code</button>
+                <button class="quick-card">Download Invoice</button>
+                <button class="quick-card">View My Vehicle</button>
+                <button class="quick-card">Emergency Support</button>
+            </div>
+        </section>
+    </div>
+</div>
