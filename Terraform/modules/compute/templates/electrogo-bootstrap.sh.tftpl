@@ -1,0 +1,221 @@
+#!/bin/bash
+set -xe
+exec > /var/log/user-data.log 2>&1
+
+# ===========================================================
+# Terraform-injected values
+# ===========================================================
+APP_REPO_URL="${git_repo_url}"
+APP_BRANCH="${git_branch}"
+DB_HOST="${db_host}"
+DB_PORT="${db_port}"
+DB_NAME="${db_name}"
+DB_USERNAME="${db_username}"
+DB_PASSWORD="${db_password}"
+APP_USER="${vm_admin_username}"
+
+# ===========================================================
+# Constants
+# ===========================================================
+APP_PORT="5000"
+APP_SRC_DIR="/home/${vm_admin_username}/src"
+APP_DIR="/home/${vm_admin_username}/app"
+
+export HOME=/root
+export DOTNET_CLI_HOME=/root
+export DEBIAN_FRONTEND=noninteractive
+
+echo "===== USERDATA START ====="
+echo "REPO: $APP_REPO_URL"
+echo "BRANCH: $APP_BRANCH"
+echo "USER: $APP_USER"
+echo "DB: $DB_USERNAME@$DB_HOST:$DB_PORT/$DB_NAME"
+
+# ===========================================================
+# Wait for apt lock
+# ===========================================================
+for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do
+  fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1 || break
+  echo "apt locked, waiting 10s ($i/20)..."
+  sleep 10
+done
+
+# ===========================================================
+# Install base packages
+# ===========================================================
+apt-get update -y
+apt-get install -y nginx git curl wget unzip netcat-openbsd default-mysql-client
+
+# ===========================================================
+# Install .NET 8 SDK
+# ===========================================================
+wget -q https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.deb -O /tmp/ms-prod.deb
+dpkg -i /tmp/ms-prod.deb
+rm /tmp/ms-prod.deb
+apt-get update -y
+apt-get install -y dotnet-sdk-8.0
+dotnet --version
+
+# ===========================================================
+# Clone repo
+# ===========================================================
+rm -rf "$APP_SRC_DIR"
+git clone --branch "$APP_BRANCH" --depth 1 "$APP_REPO_URL" "$APP_SRC_DIR"
+
+PROJECT_FILE=$(find "$APP_SRC_DIR" -maxdepth 3 -name "*.csproj" | head -n1)
+if [ -z "$PROJECT_FILE" ]; then
+  echo "ERROR: no .csproj found in $APP_SRC_DIR"
+  exit 1
+fi
+echo "Project: $PROJECT_FILE"
+
+# ===========================================================
+# Build and publish
+# ===========================================================
+rm -rf "$APP_DIR"
+mkdir -p "$APP_DIR"
+dotnet restore "$PROJECT_FILE"
+dotnet publish "$PROJECT_FILE" -c Release -o "$APP_DIR"
+
+# ===========================================================
+# Write appsettings.json with DB connection string
+# ===========================================================
+cat > "$APP_DIR/appsettings.json" << APPSETTINGS
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "DefaultConnection": "server=$DB_HOST;port=$DB_PORT;database=$DB_NAME;user=$DB_USERNAME;password=$DB_PASSWORD;"
+  }
+}
+APPSETTINGS
+
+chown -R "$APP_USER:$APP_USER" "$APP_DIR" "$APP_SRC_DIR"
+
+# ===========================================================
+# Detect app entry DLL
+# ===========================================================
+APP_DLL="$APP_DIR/ElectroGO.dll"
+if [ ! -f "$APP_DLL" ]; then
+  echo "ElectroGO.dll not found, scanning..."
+  APP_DLL=$(find "$APP_DIR" -maxdepth 1 -name "*.dll" \
+    ! -iname "Microsoft.*" \
+    ! -iname "System.*" \
+    ! -iname "Pomelo.*" \
+    ! -iname "MySqlConnector.*" \
+    ! -iname "*.Views.dll" | head -n1)
+fi
+if [ -z "$APP_DLL" ]; then
+  echo "ERROR: no app DLL found"
+  ls -la "$APP_DIR"
+  exit 1
+fi
+echo "DLL: $APP_DLL"
+
+# ===========================================================
+# Write systemd service file
+# Resolve all variables to plain strings first
+# ===========================================================
+R_DIR="$APP_DIR"
+R_DLL="$APP_DLL"
+R_USER="$APP_USER"
+R_PORT="$APP_PORT"
+R_CONN="server=$DB_HOST;port=$DB_PORT;database=$DB_NAME;user=$DB_USERNAME;password=$DB_PASSWORD;"
+
+cat > /etc/systemd/system/electrogo.service << UNIT
+[Unit]
+Description=ElectroGo ASP.NET Core App
+After=network.target
+
+[Service]
+WorkingDirectory=$R_DIR
+ExecStart=/usr/bin/dotnet $R_DLL
+Restart=always
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=electrogo
+User=$R_USER
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment="ASPNETCORE_URLS=http://0.0.0.0:$R_PORT"
+Environment="ConnectionStrings__DefaultConnection=$R_CONN"
+
+[Install]
+WantedBy=multi-user.target
+UNIT
+
+echo "===== Service file written ====="
+cat /etc/systemd/system/electrogo.service
+
+# ===========================================================
+# Write nginx config
+# Backslash-escape nginx dollar vars so bash writes them literally
+# ===========================================================
+rm -f /etc/nginx/sites-enabled/default
+rm -f /etc/nginx/sites-available/default
+
+R_PROXY="http://127.0.0.1:$APP_PORT"
+
+cat > /etc/nginx/sites-available/electrogo << NGINX
+server {
+    listen 80;
+    server_name _;
+
+    location / {
+        proxy_pass         $R_PROXY;
+        proxy_http_version 1.1;
+        proxy_set_header   Upgrade    \$http_upgrade;
+        proxy_set_header   Connection keep-alive;
+        proxy_set_header   Host       \$host;
+        proxy_cache_bypass \$http_upgrade;
+        proxy_set_header   X-Forwarded-For   \$proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto \$scheme;
+    }
+}
+NGINX
+
+echo "===== Nginx config written ====="
+cat /etc/nginx/sites-available/electrogo
+
+ln -sf /etc/nginx/sites-available/electrogo /etc/nginx/sites-enabled/electrogo
+nginx -t
+systemctl enable nginx
+systemctl restart nginx
+
+# ===========================================================
+# Start the app service
+# ===========================================================
+systemctl daemon-reload
+systemctl enable electrogo
+systemctl restart electrogo
+
+echo "Waiting 15s for app to start..."
+sleep 15
+
+# ===========================================================
+# DB connectivity test
+# ===========================================================
+echo "===== DB TEST ====="
+getent hosts "$DB_HOST" || true
+nc -zv "$DB_HOST" "$DB_PORT" || true
+mysql -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USERNAME" -p"$DB_PASSWORD" -e "SHOW DATABASES;" || true
+
+# ===========================================================
+# Final status
+# ===========================================================
+echo "===== FINAL STATUS ====="
+systemctl status electrogo --no-pager || true
+systemctl status nginx --no-pager || true
+ss -tulnp | grep ":$APP_PORT" || echo "WARN: nothing on port $APP_PORT"
+ss -tulnp | grep ":80" || echo "WARN: nothing on port 80"
+journalctl -u electrogo -n 30 --no-pager || true
+curl -sS -m 15 "http://localhost:$APP_PORT" -o /dev/null && echo "curl: APP IS UP" || echo "curl: app not responding yet"
+
+echo "===== USERDATA END ====="
+echo "Logs: sudo tail -200 /var/log/user-data.log"
+echo "Status: sudo systemctl status electrogo"
+echo "App logs: sudo journalctl -u electrogo -n 50 --no-pager"

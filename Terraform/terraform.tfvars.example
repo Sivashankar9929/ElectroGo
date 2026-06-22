@@ -1,0 +1,9 @@
+# ── terraform.tfvars.example ──────────────────────────────────────────────────
+# Copy this to terraform.tfvars and fill in real values.
+# terraform.tfvars is gitignored — never commit real passwords.
+
+resource_group_name = "ElectroGo-Prod-RG"
+location            = "Australia East"
+
+vm_admin_password    = "CHANGE_ME_min12chars"
+mysql_admin_password = "CHANGE_ME_min12chars"
